@@ -112,6 +112,7 @@
         birdImages['yellowbird-upflap'] = 'images/yellowbird-upflap.png';
 
         pipeImages['green'] = 'images/pipe-green.png';
+        pipeImages['green-reverse'] = 'images/pipe-green-reverse.png';
         pipeImages['red'] = 'images/pipe-red.png';
 
         let numberFolder = useShadowNumbers ? 'with shadow' : 'without shadow';
@@ -281,7 +282,10 @@
             }
 
             gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
-            myObstacles.push(new component(52, height, pipeImages['green'], x, 0, "image"));
+            console.log('height:', height);
+            console.log('gap:',gap);
+
+            myObstacles.push(new component(52, height, pipeImages['green-reverse'], x, 0, "image"));
             myObstacles.push(new component(52, myGameArea.canvas.height - height - gap, pipeImages['green'], x, height + gap, "image"));
         }
 
