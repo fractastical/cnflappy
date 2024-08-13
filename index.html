@@ -3,9 +3,9 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Jockey+One&display=swap');
     body {
-      font-family: 'Press Start 2P', cursive;
+      font-family: 'Jockey One', sans-serif;
       text-align: center;
       margin: 0;
       padding: 0;
@@ -15,8 +15,8 @@
       border: 0;
       background-color: #f1f1f1;
       display: block;
-      width: 100vw; /* Make canvas responsive */
-      height: 100vh; /* Make canvas responsive */
+      width: 100vw;
+      height: 100vh;
     }
     #leaderboard-container {
       display: none;
@@ -24,14 +24,14 @@
       top: 20%;
       left: 50%;
       transform: translate(-50%, -20%);
-      background-color: #111; /* Dark background */
+      background-color: #111;
       padding: 20px;
-      border: 3px solid #f00; /* Red border */
-      color: #0f0; /* Green text color */
+      border: 3px solid #66C4E7;
+      color: #FFFFFF;
       width: 90%;
       max-width: 400px;
       box-sizing: border-box;
-      font-family: 'Press Start 2P', cursive; /* Arcade font */
+      font-family: 'Jockey One', sans-serif;
       text-align: center;
     }
 
@@ -49,7 +49,7 @@
     #leaderboard ol li {
       font-size: 12px;
       margin: 5px 0;
-      border-bottom: 1px solid #f00; /* Red border for each entry */
+      border-bottom: 1px solid #66C4E7;
       padding-bottom: 5px;
     }
 
@@ -59,11 +59,11 @@
       top: 60%;
       left: 50%;
       transform: translate(-50%, -60%);
-      background-color: #111; /* Dark background */
+      background-color: #111;
       padding: 10px 20px;
-      border: 3px solid #f00; /* Red border */
-      color: #0f0; /* Green text color */
-      font-family: 'Press Start 2P', cursive; /* Arcade font */
+      border: 3px solid #66C4E7;
+      color: #FFFFFF;
+      font-family: 'Jockey One', sans-serif;
       font-size: 16px;
       cursor: pointer;
     }
@@ -85,19 +85,17 @@
     var myVersion;
     var gameStartTime;
     var background;
-    var base;
     var birdImages = {};
     var pipeImages = {};
     var numberImages = {};
-    var useShadowNumbers = true; // Toggle between with shadow and without shadow
     var gameOver = false;
     var flapCycle = 0;
 
     const gapSettings = [
-        { time: 12, multiplier: 3.3 }, // Multiplied by 1.5
-        { time: 24, multiplier: 2.85 }, // Multiplied by 1.5
-        { time: 36, multiplier: 2.4 }, // Multiplied by 1.5
-        { time: 48, multiplier: 1.95 } // Multiplied by 1.5
+        { time: 12, multiplier: 3.3 },
+        { time: 24, multiplier: 2.85 },
+        { time: 36, multiplier: 2.4 },
+        { time: 48, multiplier: 1.95 }
     ];
 
     function loadImages() {
@@ -111,13 +109,11 @@
         birdImages['yellowbird-midflap'] = 'images/yellowbird-midflap.png';
         birdImages['yellowbird-upflap'] = 'images/yellowbird-upflap.png';
 
-        pipeImages['green'] = 'images/pipe-green.png';
-        pipeImages['green-reverse'] = 'images/pipe-green-reverse.png';
-        pipeImages['red'] = 'images/pipe-red.png';
+        pipeImages['green-top'] = 'images/pipe-green-top.png';
+        pipeImages['green-bottom'] = 'images/pipe-green-bottom.png';
 
-        let numberFolder = useShadowNumbers ? 'with shadow' : 'without shadow';
         for (let i = 0; i <= 9; i++) {
-            numberImages[i] = `images/numbers/${numberFolder}/${i}.png`;
+            numberImages[i] = `images/numbers/${i}.png`;
         }
     }
 
@@ -125,12 +121,11 @@
         loadImages();
         myGamePiece = new component(34, 24, birdImages['bluebird-midflap'], 10, 120, "image");
         myGamePiece.gravity = 0.12;
-        myScore = new component("20px", "Press Start 2P", "black", window.innerWidth - 200, window.innerHeight - 40, "text");
-        myVersion = new component("20px", "Press Start 2P", "black", 10, window.innerHeight - 40, "text");
+        myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
+        myVersion = new component("20px", "Jockey One", "white", 10, window.innerHeight - 40, "text");
         background = new component(window.innerWidth, window.innerHeight, "images/background-day.png", 0, 0, "background");
-        base = new component(window.innerWidth, 100, "images/base.png", 0, window.innerHeight - 100, "background");
         myGameArea.start();
-        gameStartTime = new Date().getTime(); // Record the game start time
+        gameStartTime = new Date().getTime();
     }
 
     var myGameArea = {
@@ -155,11 +150,11 @@
             window.addEventListener('resize', this.resize);
             window.addEventListener('touchstart', function (e) {
                 accelerate(-0.2);
-                e.preventDefault();  // Prevent default touch behavior
+                e.preventDefault();
             });
             window.addEventListener('touchend', function (e) {
                 accelerate(0.05);
-                e.preventDefault();  // Prevent default touch behavior
+                e.preventDefault();
             });
         },
         clear : function() {
@@ -194,7 +189,7 @@
         this.update = function() {
             ctx = myGameArea.context;
             if (this.type == "text") {
-                ctx.font = this.height + " " + this.width;
+                ctx.font = this.width + " " + this.height;
                 ctx.fillStyle = color;
                 ctx.fillText(this.text, this.x, this.y);
             } else if (this.type == "image" || this.type == "background") {
@@ -214,7 +209,7 @@
         this.hitTop = function() {
             if (this.y < 0) {
                 this.y = 0;
-                this.gravitySpeed = -this.gravitySpeed; // Reverse the speed to simulate a bounce
+                this.gravitySpeed = -this.gravitySpeed;
             }
         }
         this.hitBottom = function() {
@@ -225,10 +220,10 @@
             }
         }
         this.crashWith = function(otherobj) {
-            var myleft = this.x + 5; // Added offset for more precise collision detection
-            var myright = this.x + (this.width - 5); // Added offset for more precise collision detection
-            var mytop = this.y + 5; // Added offset for more precise collision detection
-            var mybottom = this.y + (this.height - 5); // Added offset for more precise collision detection
+            var myleft = this.x + 5;
+            var myright = this.x + (this.width - 5);
+            var mytop = this.y + 5;
+            var mybottom = this.y + (this.height - 5);
             var otherleft = otherobj.x;
             var otherright = otherobj.x + (otherobj.width);
             var othertop = otherobj.y;
@@ -246,7 +241,7 @@
 
         var x, height, gap, minHeight, maxHeight, minGap, maxGap;
         var currentTime = new Date().getTime();
-        var elapsedTime = (currentTime - gameStartTime) / 1000; // Elapsed time in seconds
+        var elapsedTime = (currentTime - gameStartTime) / 1000;
 
         for (i = 0; i < myObstacles.length; i += 1) {
             if (myGamePiece.crashWith(myObstacles[i])) {
@@ -262,16 +257,15 @@
         myGameArea.frameNo += 1;
 
         background.update();
-        base.update();
 
         if (myGameArea.frameNo == 1 || everyinterval(150)) {
-            x = myGameArea.canvas.width / 2; // Start obstacles closer to the middle
+            x = myGameArea.canvas.width / 2;
             minHeight = 20;
-            maxHeight = myGameArea.canvas.height - 200; // Ensure height leaves room for gap
+            maxHeight = myGameArea.canvas.height - 200;
             height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
 
-            minGap = 75; // Increased minGap for easier gameplay
-            maxGap = 300; // Increased maxGap for easier gameplay
+            minGap = 75;
+            maxGap = 300;
 
             for (var i = 0; i < gapSettings.length; i++) {
                 if (elapsedTime <= gapSettings[i].time) {
@@ -282,11 +276,24 @@
             }
 
             gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
-            console.log('height:', height);
-            console.log('gap:',gap);
 
-            myObstacles.push(new component(52, height, pipeImages['green-reverse'], x, 0, "image"));
-            myObstacles.push(new component(52, myGameArea.canvas.height - height - gap, pipeImages['green'], x, height + gap, "image"));
+            // Create top pipe using tiled image
+            let topPipeHeight = height;
+            while (topPipeHeight > 0) {
+                let segmentHeight = Math.min(topPipeHeight, 52);  // 52 is the height of the pipe segment image
+                myObstacles.push(new component(52, segmentHeight, pipeImages['green-top'], x, topPipeHeight - segmentHeight, "image"));
+                topPipeHeight -= segmentHeight;
+            }
+
+            // Create bottom pipe using tiled image
+            let bottomPipeHeight = myGameArea.canvas.height - height - gap;
+            let bottomPipeY = height + gap;
+            while (bottomPipeHeight > 0) {
+                let segmentHeight = Math.min(bottomPipeHeight, 52);
+                myObstacles.push(new component(52, segmentHeight, pipeImages['green-bottom'], x, bottomPipeY, "image"));
+                bottomPipeY += segmentHeight;
+                bottomPipeHeight -= segmentHeight;
+            }
         }
 
         for (i = 0; i < myObstacles.length; i += 1) {
@@ -296,7 +303,7 @@
 
         updateBirdImage();
         drawScore();
-        myVersion.text = "v0.844";
+        myVersion.text = "v0.912";
         myVersion.update();
         myGamePiece.newPos();
         myGamePiece.update();
@@ -314,7 +321,7 @@
 
     function drawScore() {
         let score = myGameArea.frameNo.toString();
-        let digitWidth = 24; // Assuming each number image has a width of 24px
+        let digitWidth = 24;
         let totalWidth = score.length * digitWidth;
         let x = (myGameArea.canvas.width - totalWidth) / 2;
         let y = 50;
@@ -323,14 +330,14 @@
             let digit = score[i];
             let img = new Image();
             img.src = numberImages[digit];
-            myGameArea.context.drawImage(img, x, y, digitWidth, 36); // Assuming each number image has a height of 36px
+            myGameArea.context.drawImage(img, x, y, digitWidth, 36);
             x += digitWidth;
         }
     }
 
     async function sendScore(score) {
         const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('userId') ?? 190933907; // Mock for non telegram local launch
+        const userId = urlParams.get('userId') ?? 190933907;
         const inMsgId = urlParams.get('inMsgId');
 
         try{
@@ -344,7 +351,7 @@
 
     async function fetchLeaderboard() {
         const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('userId') ?? 190933907; // Mock for non telegram local launch
+        const userId = urlParams.get('userId') ?? 190933907;
         const inMsgId = urlParams.get('inMsgId');
 
         if (inMsgId) {
@@ -354,7 +361,7 @@
         }
     }
 
-    function displayLeaderboard(leaderboard) {
+function displayLeaderboard(leaderboard) {
         const leaderboardContainer = document.getElementById('leaderboard');
         leaderboardContainer.innerHTML = '<h2>Leaderboard</h2><ol id="leaderboard-list"></ol>';
         const leaderboardList = document.getElementById('leaderboard-list');
@@ -404,3 +411,4 @@
   </script>
 </body>
 </html>
+
