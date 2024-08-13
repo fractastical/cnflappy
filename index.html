@@ -229,23 +229,24 @@
                 this.gravitySpeed = 0;
             }
         }
-    this.crashWith = function(otherobj) {
-        var myleft = this.x + 5;
-        var myright = this.x + (this.width - 5);
-        var mytop = this.y + 5;
-        var mybottom = this.y + (this.height - 5);
-        var otherleft = otherobj.x + 2; // Add small offset
-        var otherright = otherobj.x + (otherobj.width - 2); // Subtract small offset
-        var othertop = otherobj.y + 2; // Add small offset
-        var otherbottom = otherobj.y + (otherobj.height - 2); // Subtract small offset
-        var crash = true;
-        if ((mybottom < othertop) ||
-           (mytop > otherbottom) ||
-           (myright < otherleft) ||
-           (myleft > otherright)) {
-           crash = false;
+        this.crashWith = function(otherobj) {
+            var myleft = this.x + 5;
+            var myright = this.x + (this.width - 5);
+            var mytop = this.y + 5;
+            var mybottom = this.y + (this.height - 5);
+            var otherleft = otherobj.x + 2; // Add small offset
+            var otherright = otherobj.x + (otherobj.width - 2); // Subtract small offset
+            var othertop = otherobj.y + 2; // Add small offset
+            var otherbottom = otherobj.y + (otherobj.height - 2); // Subtract small offset
+            var crash = true;
+            if ((mybottom < othertop) ||
+               (mytop > otherbottom) ||
+               (myright < otherleft) ||
+               (myleft > otherright)) {
+               crash = false;
+            }
+            return crash;
         }
-        return crash;
     }
 
     function updateGameArea() {
@@ -256,18 +257,18 @@
         var elapsedTime = (currentTime - gameStartTime) / 1000;
 
         for (i = 0; i < myObstacles.length; i += 1) {
-        if (myGamePiece.crashWith(myObstacles[i])) {
-            //  grace period for very close collisions
-            if (myGamePiece.y + myGamePiece.height > myObstacles[i].y + 5 &&
-                myGamePiece.y < myObstacles[i].y + myObstacles[i].height - 5) {
-                sendScore(myGameArea.frameNo.toString()).then(r => {
-                    fetchLeaderboard();
-                });
-                myGameArea.stop();
-                displayGameOver();
-                return;
+            if (myGamePiece.crashWith(myObstacles[i])) {
+                // Add a small grace period for very close collisions
+                if (myGamePiece.y + myGamePiece.height > myObstacles[i].y + 5 &&
+                    myGamePiece.y < myObstacles[i].y + myObstacles[i].height - 5) {
+                    sendScore(myGameArea.frameNo.toString()).then(r => {
+                        fetchLeaderboard();
+                    });
+                    myGameArea.stop();
+                    displayGameOver();
+                    return;
+                }
             }
-        }
         }
         myGameArea.clear();
         myGameArea.frameNo += 1;
