@@ -171,7 +171,7 @@
         }
     }
 
-    function component(width, height, color, x, y, type) {
+    function component(width, height, color, x, y, type, flipped = false) {
         this.type = type;
         this.score = 0;
         this.width = width;
@@ -182,6 +182,8 @@
         this.y = y;
         this.gravity = 0;
         this.gravitySpeed = 0;
+        this.flipped = flipped;
+
         if (type == "image" || type == "background") {
             this.image = new Image();
             this.image.src = color;
@@ -193,7 +195,15 @@
                 ctx.fillStyle = color;
                 ctx.fillText(this.text, this.x, this.y);
             } else if (this.type == "image" || this.type == "background") {
-                ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+                if (this.flipped) {
+                    ctx.save();
+                    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+                    ctx.scale(1, -1);
+                    ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
+                    ctx.restore();
+                } else {
+                    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+                }
             } else {
                 ctx.fillStyle = color;
                 ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -277,17 +287,26 @@
 
             gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
 
-            // Create top pipe using tiled image
+            // Create top pipe
             let topPipeHeight = height;
+            // Add the top facing down part (flipped vertically)
+            myObstacles.push(new component(52, 26, pipeImages['green-top'], x, topPipeHeight - 26, "image", true));
+            // Add tiled part for the rest of the top pipe
+            topPipeHeight -= 26;
             while (topPipeHeight > 0) {
-                let segmentHeight = Math.min(topPipeHeight, 52);  // 52 is the height of the pipe segment image
-                myObstacles.push(new component(52, segmentHeight, pipeImages['green-top'], x, topPipeHeight - segmentHeight, "image"));
+                let segmentHeight = Math.min(topPipeHeight, 52);
+                myObstacles.push(new component(52, segmentHeight, pipeImages['green-bottom'], x, topPipeHeight - segmentHeight, "image"));
                 topPipeHeight -= segmentHeight;
             }
 
-            // Create bottom pipe using tiled image
+            // Create bottom pipe (remains the same)
             let bottomPipeHeight = myGameArea.canvas.height - height - gap;
             let bottomPipeY = height + gap;
+            // Add the top facing up part
+            myObstacles.push(new component(52, 26, pipeImages['green-top'], x, bottomPipeY, "image"));
+            bottomPipeY += 26;
+            bottomPipeHeight -= 26;
+            // Add tiled part for the rest of the bottom pipe
             while (bottomPipeHeight > 0) {
                 let segmentHeight = Math.min(bottomPipeHeight, 52);
                 myObstacles.push(new component(52, segmentHeight, pipeImages['green-bottom'], x, bottomPipeY, "image"));
@@ -303,7 +322,7 @@
 
         updateBirdImage();
         drawScore();
-        myVersion.text = "v0.912";
+        myVersion.text = "v0.846";
         myVersion.update();
         myGamePiece.newPos();
         myGamePiece.update();
