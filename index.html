@@ -159,6 +159,7 @@
         stop : function() {
             clearInterval(this.interval);
             gameOver = true;
+
         }
     }
 
@@ -288,6 +289,14 @@
             return;
         }
 
+        if (gameOver) {
+            displayGameOver();
+            return;
+        }
+
+
+
+
         myGameArea.frameNo += 1;
 
         var currentTime = new Date().getTime();
@@ -343,7 +352,11 @@
                     sendScore(myGameArea.frameNo.toString()).then(() => {
                         fetchLeaderboard();
                     });
+                    gameOver= true;
                     myGameArea.stop();
+                    myGameArea.clear();
+                    background.update();
+
                     displayGameOver();
                     return;
                 }
@@ -354,7 +367,7 @@
 
         updateBirdImage();
         drawScore();
-        myVersion.text = "v0.927";
+        myVersion.text = "v0.931";
         myVersion.update();
         myGamePiece.newPos();
         myGamePiece.update();
@@ -452,6 +465,7 @@
         document.getElementById('leaderboard-container').style.display = 'block';
         document.getElementById('restart-button').style.display = 'block';
     }
+
 
     function displayGameOver() {
         let ctx = myGameArea.context;
