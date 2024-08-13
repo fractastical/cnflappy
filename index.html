@@ -34,25 +34,21 @@
       font-family: 'Jockey One', sans-serif;
       text-align: center;
     }
-
     #leaderboard h2 {
       font-size: 16px;
       margin-bottom: 10px;
     }
-
     #leaderboard ol {
       list-style: none;
       padding: 0;
       margin: 0;
     }
-
     #leaderboard ol li {
       font-size: 12px;
       margin: 5px 0;
       border-bottom: 1px solid #66C4E7;
       padding-bottom: 5px;
     }
-
     #restart-button {
       display: none;
       position: absolute;
@@ -90,6 +86,8 @@
     var numberImages = {};
     var gameOver = false;
     var flapCycle = 0;
+    var gameStarted = false;
+    var messageImage;
 
     const gapSettings = [
         { time: 12, multiplier: 3.3 },
@@ -99,9 +97,9 @@
     ];
 
     function loadImages() {
-        birdImages['bluebird-downflap'] = 'images/bluebird-downflap.png';
-        birdImages['bluebird-midflap'] = 'images/bluebird-midflap.png';
-        birdImages['bluebird-upflap'] = 'images/bluebird-upflap.png';
+        birdImages['bluebird-downflap'] = 'images/bluebird-downflap2.png';
+        birdImages['bluebird-midflap'] = 'images/bluebird-midflap2.png';
+        birdImages['bluebird-upflap'] = 'images/bluebird-upflap2.png';
         birdImages['redbird-downflap'] = 'images/redbird-downflap.png';
         birdImages['redbird-midflap'] = 'images/redbird-midflap.png';
         birdImages['redbird-upflap'] = 'images/redbird-upflap.png';
@@ -109,8 +107,8 @@
         birdImages['yellowbird-midflap'] = 'images/yellowbird-midflap.png';
         birdImages['yellowbird-upflap'] = 'images/yellowbird-upflap.png';
 
-        pipeImages['green-top'] = 'images/pipe-green-top.png';
-        pipeImages['green-bottom'] = 'images/pipe-green-bottom.png';
+        pipeImages['green-top'] = 'images/pipe-green-top2.png';
+        pipeImages['green-bottom'] = 'images/pipe-green-bottom2.png';
 
         for (let i = 0; i <= 9; i++) {
             numberImages[i] = `images/numbers/${i}.png`;
@@ -119,13 +117,19 @@
 
     function startGame() {
         loadImages();
-        myGamePiece = new component(34, 24, birdImages['bluebird-midflap'], 10, 120, "image");
+        // Increase bird size by 40%
+        let birdWidth = Math.floor(34 * 1.4);
+        let birdHeight = Math.floor(24 * 1.4);
+        myGamePiece = new component(birdWidth, birdHeight, birdImages['bluebird-midflap'], 10, 120, "image");
         myGamePiece.gravity = 0.12;
         myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
         myVersion = new component("20px", "Jockey One", "white", 10, window.innerHeight - 40, "text");
-        background = new component(window.innerWidth, window.innerHeight, "images/background-day.png", 0, 0, "background");
+        background = new component(window.innerWidth, window.innerHeight, "images/background-day2.png", 0, 0, "background");
+        
+        messageImage = new Image();
+        messageImage.src = "images/message.png";
+        
         myGameArea.start();
-        gameStartTime = new Date().getTime();
     }
 
     var myGameArea = {
@@ -137,25 +141,11 @@
             document.body.insertBefore(this.canvas, document.body.childNodes[0]);
             this.frameNo = 0;
             this.interval = setInterval(updateGameArea, 20);
-            window.addEventListener('keydown', function (e) {
-                if (e.code == 'Space') {
-                    accelerate(-0.2);
-                }
-            });
-            window.addEventListener('keyup', function (e) {
-                if (e.code == 'Space') {
-                    accelerate(0.05);
-                }
-            });
+            window.addEventListener('keydown', handleKeyDown);
+            window.addEventListener('keyup', handleKeyUp);
+            this.canvas.addEventListener('touchstart', handleTouch);
+            this.canvas.addEventListener('touchend', handleTouch);
             window.addEventListener('resize', this.resize);
-            window.addEventListener('touchstart', function (e) {
-                accelerate(-0.2);
-                e.preventDefault();
-            });
-            window.addEventListener('touchend', function (e) {
-                accelerate(0.05);
-                e.preventDefault();
-            });
         },
         clear : function() {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -163,12 +153,48 @@
         resize: function() {
             myGameArea.canvas.width = window.innerWidth;
             myGameArea.canvas.height = window.innerHeight;
-            myGameArea.clear();
+            background.width = window.innerWidth;
+            background.height = window.innerHeight;
         },
-        stop: function() {
+        stop : function() {
             clearInterval(this.interval);
             gameOver = true;
         }
+    }
+
+    function handleKeyDown(e) {
+        if (e.code == 'Space') {
+            e.preventDefault();
+            if (!gameStarted) {
+                startGameplay();
+            } else {
+                accelerate(-0.2);
+            }
+        }
+    }
+
+    function handleKeyUp(e) {
+        if (e.code == 'Space' && gameStarted) {
+            accelerate(0.05);
+        }
+    }
+
+    function handleTouch(e) {
+        e.preventDefault();
+        if (!gameStarted) {
+            startGameplay();
+        } else if (e.type === 'touchstart') {
+            accelerate(-0.2);
+        } else if (e.type === 'touchend') {
+            accelerate(0.05);
+        }
+    }
+
+    function startGameplay() {
+        gameStarted = true;
+        gameStartTime = new Date().getTime();
+        myGamePiece.gravity = 0.05;
+        console.log("Game started!");
     }
 
     function component(width, height, color, x, y, type, flipped = false) {
@@ -195,7 +221,9 @@
                 ctx.fillStyle = color;
                 ctx.fillText(this.text, this.x, this.y);
             } else if (this.type == "image" || this.type == "background") {
-                if (this.flipped) {
+                if (this.type == "background") {
+                    ctx.drawImage(this.image, 0, 0, myGameArea.canvas.width, myGameArea.canvas.height);
+                } else if (this.flipped) {
                     ctx.save();
                     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
                     ctx.scale(1, -1);
@@ -230,14 +258,14 @@
             }
         }
         this.crashWith = function(otherobj) {
-            var myleft = this.x + 5;
-            var myright = this.x + (this.width - 5);
-            var mytop = this.y + 5;
-            var mybottom = this.y + (this.height - 5);
-            var otherleft = otherobj.x + 2; // Add small offset
-            var otherright = otherobj.x + (otherobj.width - 2); // Subtract small offset
-            var othertop = otherobj.y + 2; // Add small offset
-            var otherbottom = otherobj.y + (otherobj.height - 2); // Subtract small offset
+            var myleft = this.x + 7;  // Increased offset for larger bird
+            var myright = this.x + (this.width - 7);
+            var mytop = this.y + 7;
+            var mybottom = this.y + (this.height - 7);
+            var otherleft = otherobj.x + 2;
+            var otherright = otherobj.x + (otherobj.width - 2);
+            var othertop = otherobj.y + 2;
+            var otherbottom = otherobj.y + (otherobj.height - 2);
             var crash = true;
             if ((mybottom < othertop) ||
                (mytop > otherbottom) ||
@@ -250,30 +278,20 @@
     }
 
     function updateGameArea() {
-        if (gameOver) return;
-
-        var x, height, gap, minHeight, maxHeight, minGap, maxGap;
-        var currentTime = new Date().getTime();
-        var elapsedTime = (currentTime - gameStartTime) / 1000;
-
-        for (i = 0; i < myObstacles.length; i += 1) {
-            if (myGamePiece.crashWith(myObstacles[i])) {
-                // Add a small grace period for very close collisions
-                if (myGamePiece.y + myGamePiece.height > myObstacles[i].y + 5 &&
-                    myGamePiece.y < myObstacles[i].y + myObstacles[i].height - 5) {
-                    sendScore(myGameArea.frameNo.toString()).then(r => {
-                        fetchLeaderboard();
-                    });
-                    myGameArea.stop();
-                    displayGameOver();
-                    return;
-                }
-            }
-        }
+        console.log("Updating game area. Game started:", gameStarted);
         myGameArea.clear();
+        background.update();
+
+        if (!gameStarted) {
+            myGamePiece.update();
+            displayInitialMessage();
+            return;
+        }
+
         myGameArea.frameNo += 1;
 
-        background.update();
+        var currentTime = new Date().getTime();
+        var elapsedTime = (currentTime - gameStartTime) / 1000;
 
         if (myGameArea.frameNo == 1 || everyinterval(150)) {
             x = myGameArea.canvas.width / 2;
@@ -281,8 +299,8 @@
             maxHeight = myGameArea.canvas.height - 200;
             height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
 
-            minGap = 75;
-            maxGap = 300;
+            minGap = 105;  // Increased minimum gap for larger bird
+            maxGap = 330;  // Increased maximum gap for larger bird
 
             for (var i = 0; i < gapSettings.length; i++) {
                 if (elapsedTime <= gapSettings[i].time) {
@@ -296,9 +314,7 @@
 
             // Create top pipe
             let topPipeHeight = height;
-            // Add the top facing down part (flipped vertically)
             myObstacles.push(new component(52, 26, pipeImages['green-top'], x, topPipeHeight - 26, "image", true));
-            // Add tiled part for the rest of the top pipe
             topPipeHeight -= 26;
             while (topPipeHeight > 0) {
                 let segmentHeight = Math.min(topPipeHeight, 52);
@@ -306,14 +322,12 @@
                 topPipeHeight -= segmentHeight;
             }
 
-            // Create bottom pipe (remains the same)
+            // Create bottom pipe
             let bottomPipeHeight = myGameArea.canvas.height - height - gap;
             let bottomPipeY = height + gap;
-            // Add the top facing up part
             myObstacles.push(new component(52, 26, pipeImages['green-top'], x, bottomPipeY, "image"));
             bottomPipeY += 26;
             bottomPipeHeight -= 26;
-            // Add tiled part for the rest of the bottom pipe
             while (bottomPipeHeight > 0) {
                 let segmentHeight = Math.min(bottomPipeHeight, 52);
                 myObstacles.push(new component(52, segmentHeight, pipeImages['green-bottom'], x, bottomPipeY, "image"));
@@ -323,13 +337,24 @@
         }
 
         for (i = 0; i < myObstacles.length; i += 1) {
+            if (myGamePiece.crashWith(myObstacles[i])) {
+                if (myGamePiece.y + myGamePiece.height > myObstacles[i].y + 5 &&
+                    myGamePiece.y < myObstacles[i].y + myObstacles[i].height - 5) {
+                    sendScore(myGameArea.frameNo.toString()).then(() => {
+                        fetchLeaderboard();
+                    });
+                    myGameArea.stop();
+                    displayGameOver();
+                    return;
+                }
+            }
             myObstacles[i].x += -1;
             myObstacles[i].update();
         }
 
         updateBirdImage();
         drawScore();
-        myVersion.text = "v0.921";
+        myVersion.text = "v0.925";
         myVersion.update();
         myGamePiece.newPos();
         myGamePiece.update();
@@ -338,12 +363,12 @@
     function updateBirdImage() {
         if (myGamePiece.gravitySpeed < -0.15) {
             myGamePiece.image.src = birdImages['bluebird-upflap'];
-        } else if (myGamePiece.gravitySpeed > 0.15) {
-            myGamePiece.image.src = birdImages['bluebird-downflap'];
-        } else {
-            myGamePiece.image.src = birdImages['bluebird-midflap'];
+    } else if (myGamePiece.gravitySpeed > 0.15) {
+                myGamePiece.image.src = birdImages['bluebird-downflap'];
+            } else {
+                myGamePiece.image.src = birdImages['bluebird-midflap'];
+            }
         }
-    }
 
     function drawScore() {
         let score = myGameArea.frameNo.toString();
@@ -361,33 +386,59 @@
         }
     }
 
+    function displayInitialMessage() {
+        let ctx = myGameArea.context;
+        
+        // Draw a semi-transparent overlay
+        ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+        ctx.fillRect(0, 0, myGameArea.canvas.width, myGameArea.canvas.height);
+        
+        // Draw the message image
+        if (messageImage.complete) {
+            let scale = Math.min(myGameArea.canvas.width / messageImage.width, myGameArea.canvas.height / messageImage.height);
+            let width = messageImage.width * scale;
+            let height = messageImage.height * scale;
+            let x = (myGameArea.canvas.width - width) / 2;
+            let y = (myGameArea.canvas.height - height) / 2;
+            ctx.drawImage(messageImage, x, y, width, height);
+        }
+    }
+
     async function sendScore(score) {
         const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('userId') ?? 190933907;
-        const inMsgId = urlParams.get('inMsgId');
+        const userId = urlParams.get('userId') ?? '190933907';
+        const inMsgId = urlParams.get('inMsgId') ?? '';
 
-        try{
-            await fetch(`https://rzzuxqt0hi.execute-api.eu-central-1.amazonaws.com/Prod/api/wooky-game/score?userId=${userId}&score=${score}&inMsgId=${inMsgId}`, {
+        try {
+            const response = await fetch(`https://rzzuxqt0hi.execute-api.eu-central-1.amazonaws.com/Prod/api/wooky-game/score?userId=${userId}&score=${score}&inMsgId=${inMsgId}`, {
                 method: 'POST'
             });
-        } catch(ex){
-            console.log(ex);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        } catch(ex) {
+            console.error("Error sending score:", ex);
         }
     }
 
     async function fetchLeaderboard() {
         const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('userId') ?? 190933907;
-        const inMsgId = urlParams.get('inMsgId');
+        const userId = urlParams.get('userId') ?? '190933907';
+        const inMsgId = urlParams.get('inMsgId') ?? '';
 
-        if (inMsgId) {
+        try {
             const response = await fetch(`https://rzzuxqt0hi.execute-api.eu-central-1.amazonaws.com/Prod/api/wooky-game/leaderboard?userId=${userId}&inMsgId=${inMsgId}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const leaderboard = await response.json();
             displayLeaderboard(leaderboard);
+        } catch(ex) {
+            console.error("Error fetching leaderboard:", ex);
         }
     }
 
-function displayLeaderboard(leaderboard) {
+    function displayLeaderboard(leaderboard) {
         const leaderboardContainer = document.getElementById('leaderboard');
         leaderboardContainer.innerHTML = '<h2>Leaderboard</h2><ol id="leaderboard-list"></ol>';
         const leaderboardList = document.getElementById('leaderboard-list');
@@ -408,7 +459,7 @@ function displayLeaderboard(leaderboard) {
         ctx.fillRect(0, 0, myGameArea.canvas.width, myGameArea.canvas.height);
 
         let img = new Image();
-        img.src = "images/gameover.png";
+        img.src = "images/gameover2.png";
         img.onload = function() {
             let x = (myGameArea.canvas.width - img.width) / 2;
             let y = (myGameArea.canvas.height - img.height) / 2;
@@ -422,6 +473,7 @@ function displayLeaderboard(leaderboard) {
     }
 
     function accelerate(n) {
+        console.log("Accelerate called with:", n);
         if (!gameOver) {
             myGamePiece.gravity = n;
         }
@@ -432,9 +484,9 @@ function displayLeaderboard(leaderboard) {
         document.getElementById('restart-button').style.display = 'none';
         myObstacles = [];
         gameOver = false;
+        gameStarted = false;
         startGame();
     }
   </script>
 </body>
 </html>
-
