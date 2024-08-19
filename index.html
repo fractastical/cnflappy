@@ -97,21 +97,26 @@
     ];
 
     function loadImages() {
-        birdImages['bluebird-downflap'] = 'images/bluebird-downflap2.png';
-        birdImages['bluebird-midflap'] = 'images/bluebird-midflap2.png';
-        birdImages['bluebird-upflap'] = 'images/bluebird-upflap2.png';
-        birdImages['redbird-downflap'] = 'images/redbird-downflap.png';
-        birdImages['redbird-midflap'] = 'images/redbird-midflap.png';
-        birdImages['redbird-upflap'] = 'images/redbird-upflap.png';
-        birdImages['yellowbird-downflap'] = 'images/yellowbird-downflap.png';
-        birdImages['yellowbird-midflap'] = 'images/yellowbird-midflap.png';
-        birdImages['yellowbird-upflap'] = 'images/yellowbird-upflap.png';
+        const getImage = (source) => {
+            const img = new Image();
+            img.src = source;
+            return img;
+        }
+        birdImages['bluebird-downflap'] = getImage('images/bluebird-downflap.svg');
+        birdImages['bluebird-midflap'] = getImage('images/bluebird-midflap.svg');
+        birdImages['bluebird-upflap'] = getImage('images/bluebird-upflap.svg');
+        birdImages['redbird-downflap'] = getImage('images/redbird-downflap.png');
+        birdImages['redbird-midflap'] = getImage('images/redbird-midflap.png');
+        birdImages['redbird-upflap'] = getImage('images/redbird-upflap.png');
+        birdImages['yellowbird-downflap'] = getImage('images/yellowbird-downflap.png');
+        birdImages['yellowbird-midflap'] = getImage('images/yellowbird-midflap.png');
+        birdImages['yellowbird-upflap'] = getImage('images/yellowbird-upflap.png');
 
-        pipeImages['green-top'] = 'images/pipe-green-top2.png';
-        pipeImages['green-bottom'] = 'images/pipe-green-bottom2.png';
+        pipeImages['green-top'] = getImage('images/pipe-green-top2.png');
+        pipeImages['green-bottom'] = getImage('images/pipe-green-bottom2.png');
 
         for (let i = 0; i <= 9; i++) {
-            numberImages[i] = `images/numbers/${i}b.png`;
+            numberImages[i] = getImage(`images/numbers/munbers${i}.svg`);
         }
     }
 
@@ -124,7 +129,7 @@
         myGamePiece.gravity = 0.12;
         myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
         myVersion = new component("20px", "Jockey One", "white", 10, window.innerHeight - 40, "text");
-        background = new component(window.innerWidth, window.innerHeight, "images/background-day2.png", 0, 0, "background");
+        background = new component(window.innerWidth, window.innerHeight, "images/background-day.svg", 0, 0, "background");
         
         messageImage = new Image();
         messageImage.src = "images/message.png";
@@ -213,8 +218,12 @@
         this.flipped = flipped;
 
         if (type == "image" || type == "background") {
-            this.image = new Image();
-            this.image.src = color;
+            if (typeof color === "string") {
+                this.image = new Image();
+                this.image.src = color;
+            } else {
+                this.image = color;
+            }
         }
         this.update = function() {
             ctx = myGameArea.context;
@@ -222,7 +231,7 @@
 
             if (this.type == "text") {
                 ctx.font = this.width + " " + this.height;
-                ctx.fillStyle = color;
+                ctx.fillStyle = this.image?.src ?? color;
                 ctx.fillText(this.text, this.x, this.y);
             } else if (this.type == "image" || this.type == "background") {
                 if (this.type == "background") {
@@ -237,7 +246,7 @@
                     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
                 }
             } else {
-                ctx.fillStyle = color;
+                ctx.fillStyle = this.image?.src ?? color;
                 ctx.fillRect(this.x, this.y, this.width, this.height);
             }
         }
@@ -378,11 +387,11 @@
 
     function updateBirdImage() {
         if (myGamePiece.gravitySpeed < -0.15) {
-            myGamePiece.image.src = birdImages['bluebird-upflap'];
+            myGamePiece.image = birdImages['bluebird-upflap'];
     } else if (myGamePiece.gravitySpeed > 0.15) {
-                myGamePiece.image.src = birdImages['bluebird-downflap'];
+                myGamePiece.image = birdImages['bluebird-downflap'];
             } else {
-                myGamePiece.image.src = birdImages['bluebird-midflap'];
+                myGamePiece.image = birdImages['bluebird-midflap'];
             }
         }
 
@@ -395,9 +404,9 @@
 
         for (let i = 0; i < score.length; i++) {
             let digit = score[i];
-            let img = new Image();
-            img.src = numberImages[digit];
-            myGameArea.context.drawImage(img, x, y, digitWidth, 36);
+            // let img = new Image();
+            // img.src = numberImages[digit];
+            myGameArea.context.drawImage(numberImages[digit], x, y, digitWidth, 36);
             x += digitWidth;
         }
     }
@@ -472,7 +481,7 @@
         ctx.fillRect(0, 0, myGameArea.canvas.width, myGameArea.canvas.height);
 
         let img = new Image();
-        img.src = "images/gameover2.png";
+        img.src = "images/gameover.svg";
         img.onload = function() {
             let scale = Math.min(
                 myGameArea.canvas.width / img.width * 0.8,

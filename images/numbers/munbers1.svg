@@ -1,0 +1,33 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="80px" height="120px" viewBox="0 0 80 120">
+<defs>
+<font horiz-adv-x="2048">
+<!--  Font Name: Jockey One
+Vendor ID: TT  
+Copyright (c) 2011, Copyright (c) 2011, TypeTogether (www.type-together.com), with Reserved Font Names "Jockey" and "Jockey One"
+http://scripts.sil.org/OFL
+URL for more Information: http://www.adobe.com/go/font_vendor_id?ID=TT&Name=Jockey%20One&PSName=JockeyOne-Regular&applanguage=en_US-->
+<font-face font-family="Jockey_One_Regular" units-per-em="2048" ascent="2210" descent="653"/>
+
+<glyph unicode="1" horiz-adv-x="584" d="
+M 184 0
+L 184 1188 20 1188 20 1434 471 1434 471 0 184 0 Z"/>
+</font>
+</defs>
+
+<g transform="matrix( 5.0390472412109375, 0, 0, 5.0390472412109375, -322.15,-59.3) ">
+<clipPath id="Mask_Mask_1">
+<rect x="65.35" y="-2" width="13.3" height="48.75" fill="#FFFFFF" stroke="none"/>
+</clipPath>
+
+<text clip-path="url(#Mask_Mask_1)" writing-mode="lr"><tspan x="67.45" y="34.55" baseline-shift="0%" kerning="auto" font-family="Jockey_One_Regular" font-size="32" fill="#000000" xml:space="preserve">1</tspan></text>
+</g>
+
+<g transform="matrix( 4.6115875244140625, 0, 0, 4.6115875244140625, -291.65,-49.8) ">
+<clipPath id="Mask_Mask_2">
+<rect x="65.35" y="-2" width="13.3" height="48.75" fill="#FFFFFF" stroke="none"/>
+</clipPath>
+
+<text clip-path="url(#Mask_Mask_2)" writing-mode="lr"><tspan x="67.45" y="34.55" baseline-shift="0%" kerning="auto" font-family="Jockey_One_Regular" font-size="32" fill="#FFFFFF" xml:space="preserve">1</tspan></text>
+</g>
+</svg>

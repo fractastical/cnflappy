@@ -1,0 +1,50 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="80px" height="120px" viewBox="0 0 80 120">
+<defs>
+<font horiz-adv-x="2048">
+<!--  Font Name: Jockey One
+Vendor ID: TT  
+Copyright (c) 2011, Copyright (c) 2011, TypeTogether (www.type-together.com), with Reserved Font Names "Jockey" and "Jockey One"
+http://scripts.sil.org/OFL
+URL for more Information: http://www.adobe.com/go/font_vendor_id?ID=TT&Name=Jockey%20One&PSName=JockeyOne-Regular&applanguage=en_US-->
+<font-face font-family="Jockey_One_Regular" units-per-em="2048" ascent="2210" descent="653"/>
+
+<glyph unicode="8" horiz-adv-x="997" d="
+M 690 0
+L 313 0
+Q 203 47 127 156 51 264 51 403 51 629 225 743
+L 225 752
+Q 86 870 86 1049 86 1184 163 1287 240 1391 346 1434
+L 655 1434
+Q 762 1391 837 1290 911 1190 911 1055 911 877 770 756
+L 770 748
+Q 946 631 946 412 946 274 869 161 793 47 690 0 Z
+M 408 610
+Q 336 551 336 436 336 373 359 315 383 258 412 238
+L 586 238
+Q 614 258 638 315 662 373 662 436 662 551 590 610
+L 408 610 Z
+M 420 1188
+Q 391 1167 369 1121 346 1075 346 1020 346 917 418 850
+L 580 850
+Q 651 917 651 1020 651 1075 629 1121 606 1167 578 1188
+L 420 1188 Z"/>
+</font>
+</defs>
+
+<g transform="matrix( 5.0390472412109375, 0, 0, 5.0390472412109375, -322.15,-59.3) ">
+<clipPath id="Mask_Mask_1">
+<rect x="62.1" y="-2" width="19.8" height="48.75" fill="#FFFFFF" stroke="none"/>
+</clipPath>
+
+<text clip-path="url(#Mask_Mask_1)" writing-mode="lr"><tspan x="64.2" y="34.55" baseline-shift="0%" kerning="auto" font-family="Jockey_One_Regular" font-size="32" fill="#000000" xml:space="preserve">8</tspan></text>
+</g>
+
+<g transform="matrix( 4.6115875244140625, 0, 0, 4.6115875244140625, -291.65,-49.8) ">
+<clipPath id="Mask_Mask_2">
+<rect x="62.1" y="-2" width="19.8" height="48.75" fill="#FFFFFF" stroke="none"/>
+</clipPath>
+
+<text clip-path="url(#Mask_Mask_2)" writing-mode="lr"><tspan x="64.2" y="34.55" baseline-shift="0%" kerning="auto" font-family="Jockey_One_Regular" font-size="32" fill="#FFFFFF" xml:space="preserve">8</tspan></text>
+</g>
+</svg>
