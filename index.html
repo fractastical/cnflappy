@@ -102,9 +102,9 @@
             img.src = source;
             return img;
         }
-        birdImages['bluebird-downflap'] = getImage('images/bluebird-downflap.svg');
-        birdImages['bluebird-midflap'] = getImage('images/bluebird-midflap.svg');
-        birdImages['bluebird-upflap'] = getImage('images/bluebird-upflap.svg');
+        birdImages['bluebird-downflap'] = getImage('images/bluebird-downflap2.png');
+        birdImages['bluebird-midflap'] = getImage('images/bluebird-midflap2.png');
+        birdImages['bluebird-upflap'] = getImage('images/bluebird-upflap2.png');
         birdImages['redbird-downflap'] = getImage('images/redbird-downflap.png');
         birdImages['redbird-midflap'] = getImage('images/redbird-midflap.png');
         birdImages['redbird-upflap'] = getImage('images/redbird-upflap.png');
@@ -129,7 +129,7 @@
         myGamePiece.gravity = 0.12;
         myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
         myVersion = new component("20px", "Jockey One", "white", 10, window.innerHeight - 40, "text");
-        background = new component(window.innerWidth, window.innerHeight, "images/background-day.svg", 0, 0, "background");
+        background = new component(window.innerWidth, window.innerHeight, "images/background-day2.png", 0, 0, "background");
         
         messageImage = new Image();
         messageImage.src = "images/message.png";
@@ -481,7 +481,7 @@
         ctx.fillRect(0, 0, myGameArea.canvas.width, myGameArea.canvas.height);
 
         let img = new Image();
-        img.src = "images/gameover.svg";
+        img.src = "images/gameover2.png";
         img.onload = function() {
             let scale = Math.min(
                 myGameArea.canvas.width / img.width * 0.8,
