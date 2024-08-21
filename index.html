@@ -409,7 +409,8 @@
         
         const scoreDiv = document.getElementById('score-div');
         scoreDiv.innerHTML = score
-        const  x = (myGameArea.canvas.width - scoreDiv.offsetWidth) / 2;
+        const width = 20*score.length;
+        const  x = (myGameArea.canvas.width - width) / 2;
         scoreDiv.style.left = `${x}px`;
     }
 
