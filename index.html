@@ -111,9 +111,9 @@
             img.src = source;
             return img;
         }
-        birdImages['bluebird-downflap'] = getImage('images/blue_chewy0001.svg');
-        birdImages['bluebird-midflap'] = getImage('images/blue_chewy0002.svg');
-        birdImages['bluebird-upflap'] = getImage('images/blue_chewy0003.svg');
+        birdImages['bluebird-downflap'] = getImage('images/chewy1.svg');
+        birdImages['bluebird-midflap'] = getImage('images/chewy2.svg');
+        birdImages['bluebird-upflap'] = getImage('images/chewy3.svg');
         birdImages['redbird-downflap'] = getImage('images/redbird-downflap.png');
         birdImages['redbird-midflap'] = getImage('images/redbird-midflap.png');
         birdImages['redbird-upflap'] = getImage('images/redbird-upflap.png');
@@ -135,7 +135,7 @@
         loadImages();
         // Increase bird se by 40%
         let birdWidth = 70;//Math.floor(34 * 1.4);
-        let birdHeight = 50;//Math.floor(24 * 1.4);
+        let birdHeight = 65;//Math.floor(24 * 1.4);
         myGamePiece = new component(birdWidth, birdHeight, birdImages['bluebird-midflap'], 10, 120, "image");
         myGamePiece.gravity = 0.12;
         myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
@@ -285,7 +285,7 @@
         }
         this.crashWith = function(otherobj) {
             var myleft = this.x + 7;  // Increased offset for larger bird
-            var myright = this.x + (this.width - 18);
+            var myright = this.x + (this.width);
             var mytop = this.y + 7;
             var mybottom = this.y + (this.height);
             var otherleft = otherobj.x + 2;
