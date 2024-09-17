@@ -405,10 +405,9 @@
 
     function drawScore() {
         let score = myGameArea.frameNo.toString();
-        
         const scoreDiv = document.getElementById('score-div');
         scoreDiv.innerHTML = score
-        const width = 20*score.length;
+        const width = 20 * score.length;
         const  x = (myGameArea.canvas.width - width) / 2;
         scoreDiv.style.left = `${x}px`;
     }
@@ -511,6 +510,8 @@
     }
 
     function restartGame() {
+                const scoreDiv = document.getElementById('score-div');
+        scoreDiv.innerHTML = ''
         document.getElementById('leaderboard-container').style.display = 'none';
         document.getElementById('restart-button').style.display = 'none';
         myObstacles = [];
