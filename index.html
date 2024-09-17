@@ -102,7 +102,7 @@
         { time: 12, multiplier: 3.3 * 1.4 },
         { time: 24, multiplier: 2.85 * 1.4 },
         { time: 36, multiplier: 2.4  * 1.4 },
-        { time: 48, multiplier: 1.95  * 1.4 }
+        { time: 48, multiplier: 1.95  * 1.4 }}
     ];
 
     function loadImages() {
@@ -137,7 +137,7 @@
         let birdWidth = 70;//Math.floor(34 * 1.4);
         let birdHeight = 65;//Math.floor(24 * 1.4);
         myGamePiece = new component(birdWidth, birdHeight, birdImages['bluebird-midflap'], 10, 120, "image");
-        myGamePiece.gravity = 0.12 * 1.2 * 1.1 * 1.2;
+        myGamePiece.gravity = 0.12 * 1.2 * 1.1 * 1.2 * 1.4;
         myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
         myVersion = new component("20px", "Jockey One", "white", 10, window.innerHeight - 40, "text");
         background = new component(window.innerWidth, window.innerHeight, "images/background-day2.png", 0, 0, "background");
@@ -188,14 +188,14 @@
             if (!gameStarted) {
                 startGameplay();
             } else {
-                accelerate(-0.2);
+                accelerate(-0.2 * 1.4);
             }
         }
     }
 
     function handleKeyUp(e) {
         if (e.code == 'Space' && gameStarted) {
-            accelerate(0.05 * 1.2 * 1.1 * 1.1 * 1.2);
+            accelerate(0.05 * 1.2 * 1.1 * 1.1 * 1.2 * 1.4);
         }
     }
 
@@ -204,7 +204,7 @@
         if (!gameStarted) {
             startGameplay();
         } else if (e.type === 'touchstart') {
-            accelerate(-0.2);
+            accelerate(-0.2 * 1.4);
         } else if (e.type === 'touchend') {
             accelerate(0.05);
         }
@@ -324,7 +324,9 @@
         var elapsedTime = (currentTime - gameStartTime) / 1000;
 
         if (myGameArea.frameNo == 1 || everyinterval(150)) {
-            x = myGameArea.canvas.width / 2;
+            x = myGameArea.canvas.width * 1.2;
+
+            // x = myGameArea.canvas.width / 2;
             minHeight = 20;
             maxHeight = myGameArea.canvas.height - 200;
             height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
@@ -365,25 +367,25 @@
                 bottomPipeHeight -= segmentHeight;
             }
         }
-        for (i = 0; i < myObstacles.length; i += 1) {
-            if (myGamePiece.crashWith(myObstacles[i])) {
-                sendScore(myGameArea.frameNo.toString()).then(() => {
-                    fetchLeaderboard();
-                });
-                gameOver = true;
-                myGameArea.stop();
-                myGameArea.clear();
-                background.update();
-                displayGameOver();
-                return;
-            }
-            myObstacles[i].x += -1;
-            myObstacles[i].update();
+    for (i = 0; i < myObstacles.length; i += 1) {
+        if (myGamePiece.crashWith(myObstacles[i])) {
+            sendScore(myGameArea.frameNo.toString()).then(() => {
+                fetchLeaderboard();
+            });
+            gameOver = true;
+            myGameArea.stop();
+            myGameArea.clear();
+            background.update();
+            displayGameOver();
+            return;
         }
+        // Increase pipe speed here
+        myObstacles[i].x += -1.2; // Changed from -1 to -2
+        myObstacles[i].update();
 
         updateBirdImage();
         drawScore();
-        myVersion.text = "v0.945"; // VERSION VERSION VERSION
+        myVersion.text = "v0.947"; // VERSION VERSION VERSION
         myVersion.update();
         myGamePiece.newPos();
         myGamePiece.update();
