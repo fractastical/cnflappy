@@ -481,12 +481,16 @@
         const startTextDiv = document.getElementById('wooky-start-text');
         const birdDiv = document.getElementById('wooky-bird');
         initdiv.style.height = `${window.innerHeight}px;`;
+        initdiv.addEventListener('click', (e => e.preventDefault()));
 
         titleDiv.style.top = `${Math.ceil(window.innerHeight / 4)}px`;
+        titleDiv.addEventListener('click', (e => e.preventDefault()));
 
         startTextDiv.style.top = `${Math.ceil(window.innerHeight / 4) + 130}px`;
+        startTextDiv.addEventListener('click', (e => e.preventDefault()));
 
-        birdDiv.style.top = `${Math.ceil(window.innerHeight / 4) + 300}px`
+        birdDiv.style.top = `${Math.ceil(window.innerHeight / 4) + 300}px`;
+        birdDiv.addEventListener('click', (e) => e.preventDefault());
         // let ctx = myGameArea.context;
         
         // // Draw a semi-transparent overlay
