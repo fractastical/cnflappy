@@ -110,7 +110,7 @@
     const GRAVITY_DEFAULT =  0.12 * 1.2 * 1.1 * 1.2 * 1.4 * 1.5 * 1.7 * 2 * 2 * 2 * 2 * 2  * 2 * 3 * 1.2 * 4 * 2 * 4 * 8 * 1.2;
     const GRAVITY_DELTA_ACCELERATION = 4;
 
-    const VERSION_NUMBER = "v0.962"
+    const VERSION_NUMBER = "v0.963"
 
 
 
@@ -215,7 +215,10 @@
         if (!gameStarted) {
             startGameplay();
         } else if (e.type === 'touchstart') {
-            accelerate(touchAcceleration);
+            if(this.gravitySpeed < -0.15) 
+                accelerate(touchAcceleration / 3);
+            else 
+              accelerate(touchAcceleration);
         } else if (e.type === 'touchend') {
             accelerate(0.05);
         }
