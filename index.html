@@ -75,6 +75,7 @@
         position: absolute;
         top: 0px;
         width: 100%;
+        background: rgba(0,0,0,0.4);
     }
     #wooky-title-text {
         position: absolute;
@@ -149,7 +150,7 @@
     const GRAVITY_DEFAULT =  0.12 * 1.2 * 1.1 * 1.2 * 1.4 * 1.5 * 1.7 * 2 * 2 * 2 * 2 * 2  * 2 * 3 * 1.2 * 4 * 2 * 4 * 8 * 1.2;
     const GRAVITY_DELTA_ACCELERATION = 4;
 
-    const VERSION_NUMBER = "v0.964"
+    const VERSION_NUMBER = "v0.965"
 
 
 
@@ -246,6 +247,13 @@
     function handleKeyUp(e) {
         if (e.code == 'Space' && gameStarted) {
             accelerate(0.05 * 1.2 * 1.1 * 1.1 * 1.2 * 1.4);
+        }
+    }
+
+    function handleStart(e) {
+        e.preventDefault();
+        if(!gameStarted) {
+            startGameplay();
         }
     }
 
@@ -480,17 +488,14 @@
         const titleDiv = document.getElementById('wooky-title-text');
         const startTextDiv = document.getElementById('wooky-start-text');
         const birdDiv = document.getElementById('wooky-bird');
-        initdiv.style.height = `${window.innerHeight}px;`;
-        initdiv.addEventListener('click', (e => e.preventDefault()));
+        initdiv.setAttribute('style', `height: ${window.innerHeight}px;`);
+        initdiv.addEventListener('click', handleStart);
 
         titleDiv.style.top = `${Math.ceil(window.innerHeight / 4)}px`;
-        titleDiv.addEventListener('click', (e => e.preventDefault()));
 
         startTextDiv.style.top = `${Math.ceil(window.innerHeight / 4) + 130}px`;
-        startTextDiv.addEventListener('click', (e => e.preventDefault()));
 
         birdDiv.style.top = `${Math.ceil(window.innerHeight / 4) + 300}px`;
-        birdDiv.addEventListener('click', (e) => e.preventDefault());
         // let ctx = myGameArea.context;
         
         // // Draw a semi-transparent overlay
