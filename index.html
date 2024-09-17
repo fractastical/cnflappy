@@ -137,7 +137,7 @@
         let birdWidth = 70;//Math.floor(34 * 1.4);
         let birdHeight = 65;//Math.floor(24 * 1.4);
         myGamePiece = new component(birdWidth, birdHeight, birdImages['bluebird-midflap'], 10, 120, "image");
-        myGamePiece.gravity = 0.12 * 1.2;
+        myGamePiece.gravity = 0.12 * 1.2 * 1.1;
         myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
         myVersion = new component("20px", "Jockey One", "white", 10, window.innerHeight - 40, "text");
         background = new component(window.innerWidth, window.innerHeight, "images/background-day2.png", 0, 0, "background");
@@ -195,7 +195,7 @@
 
     function handleKeyUp(e) {
         if (e.code == 'Space' && gameStarted) {
-            accelerate(0.05 * 1.2);
+            accelerate(0.05 * 1.2 * 1.1);
         }
     }
 
@@ -284,22 +284,19 @@
             }
         }
         this.crashWith = function(otherobj) {
-            var myleft = this.x + 7;  // Increased offset for larger bird
-            var myright = this.x + (this.width);
-            var mytop = this.y + 7;
-            var mybottom = this.y + (this.height);
-            var otherleft = otherobj.x + 2;
-            var otherright = otherobj.x + (otherobj.width - 2);
-            var othertop = otherobj.y + 2;
-            var otherbottom = otherobj.y + (otherobj.height - 2);
-            var crash = true;
-            if ((mybottom < othertop) ||
-               (mytop > otherbottom) ||
-               (myright < otherleft) ||
-               (myleft > otherright)) {
-               crash = false;
-            }
-            return crash;
+            var myleft = this.x + 5;
+            var myright = this.x + (this.width - 5);
+            var mytop = this.y + 5;
+            var mybottom = this.y + (this.height - 5);
+            var otherleft = otherobj.x + 5;
+            var otherright = otherobj.x + (otherobj.width - 5);
+            var othertop = otherobj.y + 5;
+            var otherbottom = otherobj.y + (otherobj.height - 5);
+            
+            return !(mybottom < othertop || 
+                     mytop > otherbottom || 
+                     myright < otherleft || 
+                     myleft > otherright);
         }
     }
 
@@ -368,22 +365,17 @@
                 bottomPipeHeight -= segmentHeight;
             }
         }
-
         for (i = 0; i < myObstacles.length; i += 1) {
             if (myGamePiece.crashWith(myObstacles[i])) {
-                if (myGamePiece.y + myGamePiece.height > myObstacles[i].y + 5 &&
-                    myGamePiece.y < myObstacles[i].y + myObstacles[i].height - 5) {
-                    sendScore(myGameArea.frameNo.toString()).then(() => {
-                        fetchLeaderboard();
-                    });
-                    gameOver= true;
-                    myGameArea.stop();
-                    myGameArea.clear();
-                    background.update();
-
-                    displayGameOver();
-                    return;
-                }
+                sendScore(myGameArea.frameNo.toString()).then(() => {
+                    fetchLeaderboard();
+                });
+                gameOver = true;
+                myGameArea.stop();
+                myGameArea.clear();
+                background.update();
+                displayGameOver();
+                return;
             }
             myObstacles[i].x += -1;
             myObstacles[i].update();
@@ -391,7 +383,7 @@
 
         updateBirdImage();
         drawScore();
-        myVersion.text = "v0.933";
+        myVersion.text = "v0.943";
         myVersion.update();
         myGamePiece.newPos();
         myGamePiece.update();
