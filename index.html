@@ -139,7 +139,7 @@
         let birdWidth = 70;//Math.floor(34 * 1.4);
         let birdHeight = 65;//Math.floor(24 * 1.4);
         myGamePiece = new component(birdWidth, birdHeight, birdImages['bluebird-midflap'], 10, 120, "image");
-        myGamePiece.gravity = 0.12 * 1.2 * 1.1 * 1.2 * 1.4;
+        myGamePiece.gravity = 0.12 * 1.2 * 1.1 * 1.2 * 1.4 * 1.5;
         myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
         myVersion = new component("20px", "Jockey One", "white", 10, window.innerHeight - 40, "text");
         background = new component(window.innerWidth, window.innerHeight, "images/background-day2.png", 0, 0, "background");
@@ -387,12 +387,12 @@
         }
         updateBirdImage();
         drawScore();
-        myVersion.text = "v0.947"; // VERSION VERSION VERSION
+        myVersion.text = "v0.948"; // VERSION VERSION VERSION
         myVersion.update();
         myGamePiece.newPos();
         myGamePiece.update();
     }
-    }
+    
 
     function updateBirdImage() {
         if (myGamePiece.gravitySpeed < -0.15) {
