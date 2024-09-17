@@ -204,9 +204,9 @@
         if (!gameStarted) {
             startGameplay();
         } else if (e.type === 'touchstart') {
-            accelerate(-0.2 *  1.2 *  1.2);
+            accelerate(-0.2);
         } else if (e.type === 'touchend') {
-            accelerate(0.05 *  1.2);
+            accelerate(0.05);
         }
     }
 
