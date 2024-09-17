@@ -275,9 +275,9 @@
             }
         }
         this.newPos = function() {
-            this.gravitySpeed += this.gravity;
+            this.gravitySpeed += this.gravity * GRAVITY_DELTA_ACCELERATION;
             if(this.gravitySpeed < -0.15)
-                this.gravitySpeed += this.gravity * GRAVITY_DELTA_ACCELERATION;
+                this.gravitySpeed += this.gravity * 2;
 
             this.x += this.speedX;
             this.y += this.speedY + this.gravitySpeed;
