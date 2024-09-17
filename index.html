@@ -369,22 +369,22 @@
                 bottomPipeHeight -= segmentHeight;
             }
         }
-    for (i = 0; i < myObstacles.length; i += 1) {
-        if (myGamePiece.crashWith(myObstacles[i])) {
-            sendScore(myGameArea.frameNo.toString()).then(() => {
-                fetchLeaderboard();
-            });
-            gameOver = true;
-            myGameArea.stop();
-            myGameArea.clear();
-            background.update();
-            displayGameOver();
-            return;
+        for (i = 0; i < myObstacles.length; i += 1) {
+            if (myGamePiece.crashWith(myObstacles[i])) {
+                sendScore(myGameArea.frameNo.toString()).then(() => {
+                    fetchLeaderboard();
+                });
+                gameOver = true;
+                myGameArea.stop();
+                myGameArea.clear();
+                background.update();
+                displayGameOver();
+                return;
+            }
+            // Increase pipe speed here
+            myObstacles[i].x += -1.2; // Changed from -1 to -2
+            myObstacles[i].update();
         }
-        // Increase pipe speed here
-        myObstacles[i].x += -1.2; // Changed from -1 to -2
-        myObstacles[i].update();
-
         updateBirdImage();
         drawScore();
         myVersion.text = "v0.947"; // VERSION VERSION VERSION
