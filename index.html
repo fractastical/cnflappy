@@ -153,6 +153,7 @@
 
     const VERSION_NUMBER = "v0.965"
 
+    const telegramWebApp = window.Telegram.WebApp;
 
 
     //bump"v0.947"
@@ -183,7 +184,20 @@
         }
     }
 
+    async function startGameApi() {
+        const userId = telegramWebApp.initDataUnsafe.user.id;
+        const params = new URLSearchParams(window.location.search);
+        const refferer = params.get('tgWebAppStartParam');
+
+        if (refferer) {
+            const response = await fetch(`https://api-6tq2raxpza-uc.a.run.app/api/start-game?userId=${userId}&refferer=${refferer}`, {
+                method: 'POST'
+            });
+        }
+    }
+
     function startGame() {
+        startGameApi();
         loadImages();
         // Increase bird se by 40%
         let birdWidth = 70;//Math.floor(34 * 1.4);
@@ -526,7 +540,6 @@
         // const userId = urlParams.get('userId') ?? '190933907';
         // const inMsgId = urlParams.get('inMsgId') ?? '';
 
-        const telegramWebApp = window.Telegram.WebApp;
         const userId = telegramWebApp.initDataUnsafe.user.id;
         try {
             const response = await fetch(`https://api-6tq2raxpza-uc.a.run.app/api/score?userId=${userId}&score=${score}`, {
