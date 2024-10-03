@@ -106,6 +106,16 @@
         background-repeat: no-repeat;
         background-position: center;
     }
+    #share-div {
+        position: absolute;
+        height: 50px;
+        width: 150px;
+        background-color: #66C4E7;
+        color: #ffffff;
+        border: 1px solid #ffffff;
+        border-radius: 15px;
+        line-height: 50px;
+    }
   </style>
 </head>
 <body onload="startGame()">
@@ -121,6 +131,7 @@
     <div id="wooky-start-text"></div>
     <div id="wooky-bird"></div>
   </div>
+  <a id="share-div" href="#">Share</a>
   <div id="restart-button" onclick="restartGame()">Restart</div>
 
   <script>
@@ -503,6 +514,8 @@
         const titleDiv = document.getElementById('wooky-title-text');
         const startTextDiv = document.getElementById('wooky-start-text');
         const birdDiv = document.getElementById('wooky-bird');
+        const shareLink = document.getElementById('share-div');
+
         initdiv.setAttribute('style', `height: ${window.innerHeight}px;`);
         initdiv.addEventListener('click', handleStart);
 
@@ -511,6 +524,13 @@
         startTextDiv.style.top = `${Math.ceil(window.innerHeight / 4) + 130}px`;
 
         birdDiv.style.top = `${Math.ceil(window.innerHeight / 4) + 300}px`;
+
+        shareLink.innerText = 'Share with friends';
+        shareLink.style.top = `${Math.ceil(window.innerHeight / 4) + 400}px`;
+        shareLink.style.left = `${Math.ceil((window.innerWidth - 150)/2)}px`;
+        shareLink.style.zIndex = 5;
+        shareLink.href=`https://t.me/share/url?url=t.me/wooky_bird_bot/wookybirdgame?startapp=${telegramWebApp.initDataUnsafe.user.id}`;
+
         // let ctx = myGameArea.context;
         
         // // Draw a semi-transparent overlay
@@ -531,6 +551,8 @@
     function removeInitialMessage() {
         const initdiv = document.getElementById('initial-div');
         initdiv.style.display = 'none';
+        const shareDiv = document.getElementById('share-div');
+        shareDiv.style.display = 'none';
     }
 
 
