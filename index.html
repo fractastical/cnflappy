@@ -519,14 +519,14 @@
         initdiv.setAttribute('style', `height: ${window.innerHeight}px;`);
         initdiv.addEventListener('click', handleStart);
 
-        titleDiv.style.top = `${Math.ceil(window.innerHeight / 4)}px`;
+        titleDiv.style.top = `${Math.ceil(window.innerHeight / 15)}px`;
 
-        startTextDiv.style.top = `${Math.ceil(window.innerHeight / 4) + 130}px`;
+        startTextDiv.style.top = `${Math.ceil(window.innerHeight / 8) + 130}px`;
 
-        birdDiv.style.top = `${Math.ceil(window.innerHeight / 4) + 300}px`;
+        birdDiv.style.top = `${Math.ceil(window.innerHeight / 8) + 300}px`;
 
         shareLink.innerText = 'Share with friends';
-        shareLink.style.top = `${Math.ceil(window.innerHeight / 4) + 400}px`;
+        shareLink.style.top = `${Math.ceil(window.innerHeight-60)}px`;
         shareLink.style.left = `${Math.ceil((window.innerWidth - 150)/2)}px`;
         shareLink.style.zIndex = 5;
         shareLink.href=`https://t.me/share/url?url=t.me/wooky_bird_bot/wookybirdgame?startapp=${telegramWebApp.initDataUnsafe.user.id}`;
