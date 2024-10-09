@@ -161,6 +161,7 @@
     const touchAcceleration = -0.2 * 1.4 * 2 * 2 / 1.5 / 1.5 / 1.3;
     const GRAVITY_DEFAULT =  0.12 * 1.2 * 1.1 * 1.2 * 1.4 * 1.5 * 1.7 * 2 * 2 * 2 * 2 * 2  * 2 * 3 * 1.2 * 4 * 2 * 4 * 8 * 1.2;
     const GRAVITY_DELTA_ACCELERATION = 4;
+    const MAX_ACCELERATION = -0.12;
 
     const VERSION_NUMBER = "v0.965"
 
@@ -283,12 +284,13 @@
         }
     }
 
+
     function handleTouch(e) {
         e.preventDefault();
         if (!gameStarted) {
             startGameplay();
         } else if (e.type === 'touchstart') {
-            if(this.gravitySpeed < -0.15) 
+            if(myGamePiece.gravitySpeed < MAX_ACCELERATION) 
                 accelerate(touchAcceleration / 3);
             else 
               accelerate(touchAcceleration);
@@ -300,8 +302,10 @@
     function startGameplay() {
         gameStarted = true;
         gameStartTime = new Date().getTime();
-        myGamePiece.gravity = 0.05 * 5;
-        console.log("Game started!");
+        
+        setTimeout(() => {
+            myGamePiece.gravity = 0.05 * 5; // Gravity starts after 2 seconds
+        }, 2000);
     }
 
     function component(width, height, color, x, y, type, flipped = false) {
