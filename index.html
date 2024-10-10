@@ -165,7 +165,7 @@
     const MAX_POS_SPEED = 20;
     const MAX_NEG_SPEED = -20;
 
-    const VERSION_NUMBER = "v0.977-2"
+    const VERSION_NUMBER = "v0.978-2"
 
     const telegramWebApp = window.Telegram.WebApp;
 
@@ -296,8 +296,7 @@
             console.log(myGamePiece.gravitySpeed);
             if(myGamePiece.gravitySpeed < MAX_POS_SPEED && myGamePiece.gravitySpeed > MAX_NEG_SPEED) 
                 accelerate(touchAcceleration / 3);
-            else 
-              accelerate(touchAcceleration);
+
         } else if (e.type === 'touchend') {
             // accelerate(touchAcceleration);
             accelerate(0.05);
