@@ -163,7 +163,7 @@
     const GRAVITY_DELTA_ACCELERATION = 4;
     const MAX_ACCELERATION = -0.12;
 
-    const VERSION_NUMBER = "v0.972"
+    const VERSION_NUMBER = "v0.974"
 
     const telegramWebApp = window.Telegram.WebApp;
 
@@ -296,7 +296,7 @@
             // else 
             //   accelerate(touchAcceleration);
         } else if (e.type === 'touchend') {
-            accelerate(touchAcceleration * 5);
+            accelerate(touchAcceleration);
             // accelerate(0.05);
         }
     }
@@ -306,7 +306,7 @@
         gameStartTime = new Date().getTime();
         
         setTimeout(() => {
-            myGamePiece.gravity = 0.05 * 5; // Gravity starts after 2 seconds
+            myGamePiece.gravity = 0.05 * 10; // Gravity starts after  seconds
         }, 2000);
     }
 
