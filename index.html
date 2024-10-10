@@ -163,9 +163,11 @@
     const GRAVITY_DELTA_ACCELERATION = 4;
     const MAX_ACCELERATION = -0.12;
 
-    const VERSION_NUMBER = "v0.974"
+    const VERSION_NUMBER = "v0.975"
 
     const telegramWebApp = window.Telegram.WebApp;
+
+    telegramWebApp?.expand();
 
 
     //bump"v0.947"
@@ -237,9 +239,9 @@
             this.frameNo = 0;
             this.interval = setInterval(updateGameArea, 20);
             window.addEventListener('keydown', handleKeyDown);
-            window.addEventListener('keyup', handleKeyUp);
-            this.canvas.addEventListener('touchstart', handleTouch);
-            this.canvas.addEventListener('touchend', handleTouch);
+            // window.addEventListener('keyup', handleKeyUp);
+            // this.canvas.addEventListener('touchstart', handleTouch);
+            // this.canvas.addEventListener('touchend', handleTouch);
             window.addEventListener('resize', this.resize);
 
         },
