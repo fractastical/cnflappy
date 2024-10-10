@@ -118,7 +118,14 @@
     }
   </style>
 </head>
+
 <body onload="startGame()">
+     <audio id="backgroundMusic" loop>
+    <source src="flappyMusic.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+
   <div id="leaderboard-container">
     <div id="leaderboard">
       <h2>Leaderboard</h2>
@@ -174,7 +181,7 @@
     const MAX_POS_SPEED = 20;
     const MAX_NEG_SPEED = -20;
 
-    const VERSION_NUMBER = "v0.984-2"
+    const VERSION_NUMBER = "v0.985-2"
 
     const telegramWebApp = window.Telegram.WebApp;
     telegramWebApp?.expand();
@@ -219,9 +226,29 @@
         }
     }
 
+    var backgroundMusic;
+
+    function loadAudio() {
+      backgroundMusic = document.getElementById('backgroundMusic');
+    }
+
+    function playBackgroundMusic() {
+      backgroundMusic.play().catch(error => {
+        console.log("Audio play failed:", error);
+      });
+    }
+
+    function stopBackgroundMusic() {
+      backgroundMusic.pause();
+      backgroundMusic.currentTime = 0;
+    }
+
+
     function startGame() {
         startGameApi();
         loadImages();
+        loadAudio();
+
         // Increase bird se by 40%
         let birdWidth = 70;//Math.floor(34 * 1.4);
         let birdHeight = 65;//Math.floor(24 * 1.4);
@@ -318,6 +345,7 @@
         myGamePiece.y = window.innerHeight / 2 + 20;
         // myGamePiece.gravity = GRAVITY_DEFAULT / 10; // Start with lower gravity
         myGamePiece.gravitySpeed = -1; // Initial upward velocity
+       // playBackgroundMusic();
 
         // setTimeout(() => {
         //     // myGamePiece.gravity = 0.05 * 2; // Gravity starts after  seconds
@@ -426,6 +454,7 @@ function updateGameArea() {
     }
 
     if (gameOver) {
+        stopBackgroundMusic();
         displayGameOver();
         return;
     }
@@ -678,6 +707,8 @@ if (myGameArea.frameNo == 1 || everyinterval(150)) {
         myObstacles = [];
         gameOver = false;
         gameStarted = false;
+         stopBackgroundMusic();
+
         startGame();
     }
   </script>
