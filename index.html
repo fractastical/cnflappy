@@ -167,6 +167,8 @@
 
     const telegramWebApp = window.Telegram.WebApp;
 
+    telegramWebApp?.expand();
+
 
     //bump"v0.947"
 
@@ -240,9 +242,9 @@ function startGame() {
             this.frameNo = 0;
             this.interval = setInterval(updateGameArea, 20);
             window.addEventListener('keydown', handleKeyDown);
-            window.addEventListener('keyup', handleKeyUp);
-            this.canvas.addEventListener('touchstart', handleTouch);
-            this.canvas.addEventListener('touchend', handleTouch);
+            // window.addEventListener('keyup', handleKeyUp);
+            // this.canvas.addEventListener('touchstart', handleTouch);
+            // this.canvas.addEventListener('touchend', handleTouch);
             window.addEventListener('resize', this.resize);
 
         },
