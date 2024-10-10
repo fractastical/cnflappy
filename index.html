@@ -165,7 +165,7 @@
     const MAX_POS_SPEED = 20;
     const MAX_NEG_SPEED = -20;
 
-    const VERSION_NUMBER = "v0.979-2"
+    const VERSION_NUMBER = "v0.980-2"
 
     const telegramWebApp = window.Telegram.WebApp;
     telegramWebApp?.expand();
@@ -218,7 +218,7 @@
         let birdHeight = 65;//Math.floor(24 * 1.4);
         myGamePiece = new component(birdWidth, birdHeight, birdImages['bluebird-midflap'], 10, (window.innerHeight - birdHeight) / 2, "image");
 
-        myGamePiece.gravity = GRAVITY_DEFAULT; 
+        myGamePiece.gravity = 0; 
         myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
         myVersion = new component("20px", "Jockey One", "white", 10, window.innerHeight - 40, "text");
         background = new component(window.innerWidth, window.innerHeight, "images/background-day2.png", 0, 0, "background");
@@ -306,7 +306,8 @@
     function startGameplay() {
         gameStarted = true;
         gameStartTime = new Date().getTime();
-        
+        myGamePiece.gravity = GRAVITY_DEFAULT;
+
         // setTimeout(() => {
         //     // myGamePiece.gravity = 0.05 * 2; // Gravity starts after  seconds
         // }, 4000);
