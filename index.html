@@ -162,8 +162,10 @@
     const GRAVITY_DEFAULT =  0.12 * 1.2 * 1.1 * 1.2 * 1.4 * 1.5 * 1.7 * 2 * 2 * 2 * 2 * 2  * 2 * 3 * 1.2 * 4 * 2 * 4 * 8 * 1.2;
     const GRAVITY_DELTA_ACCELERATION = 4;
     const MAX_ACCELERATION = -0.06;
+    const MAX_POS_SPEED = 20;
+    const MAX_NEG_SPEED = -20;
 
-    const VERSION_NUMBER = "v0.974-2"
+    const VERSION_NUMBER = "v0.977-2"
 
     const telegramWebApp = window.Telegram.WebApp;
 
@@ -291,7 +293,8 @@
         if (!gameStarted) {
             startGameplay();
         } else if (e.type === 'touchstart') {
-            if(myGamePiece.gravitySpeed < MAX_ACCELERATION) 
+            console.log(myGamePiece.gravitySpeed);
+            if(myGamePiece.gravitySpeed < MAX_POS_SPEED && myGamePiece.gravitySpeed > MAX_NEG_SPEED) 
                 accelerate(touchAcceleration / 3);
             else 
               accelerate(touchAcceleration);
@@ -653,6 +656,7 @@ if (myGameArea.frameNo == 1 || everyinterval(150)) {
         if (!gameOver) {
             myGamePiece.gravity = n;
         }
+        console.log(myGamePiece.gravitySpeed);
     }
 
     function restartGame() {
