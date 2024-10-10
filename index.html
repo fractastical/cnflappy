@@ -421,51 +421,59 @@ function updateGameArea() {
     var currentTime = new Date().getTime();
     var elapsedTime = (currentTime - gameStartTime) / 1000;
 
-    if (myGameArea.frameNo == 1 || everyinterval(150)) {
-        x = myGameArea.canvas.width * 1.2;
+if (myGameArea.frameNo == 1 || everyinterval(150)) {
+    x = myGameArea.canvas.width * 1.2;
 
-        let minHeight = 20;
-        let maxHeight = myGameArea.canvas.height - 200;
-        let height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
+    let minHeight = 20;
+    let maxHeight = myGameArea.canvas.height - 200;
+    let height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
 
-        let minGap = 105;  // Increased minimum gap for larger bird
-        let maxGap = 330;  // Increased maximum gap for larger bird
+    let minGap = 105;
+    let maxGap = 330;
+    gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
 
-        // Adjust gap multiplier for pipes from the beginning
-        for (let i = 0; i < gapSettings.length; i++) {
-            if (elapsedTime <= gapSettings[i].time) {
-                minGap *= gapSettings[i].multiplier;
-                maxGap *= gapSettings[i].multiplier;
-                break;
-            }
-        }
+    // Define consistent pipe width and segment height
+    const pipeWidth = 52;
+    const pipeSegmentHeight = 52; // Ensure all segments are the same height
 
-        let gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
+    // Create top pipe
+    let topPipeHeight = height;
+    myObstacles.push(new component(pipeWidth, pipeSegmentHeight, pipeImages['green-top'], x, topPipeHeight - pipeSegmentHeight, "image", true));
 
-        // Create more bottom pipes at the start of the game
-        let bottomPipeHeight = height;
-        let bottomPipeY = height + gap;
-        myObstacles.push(new component(52, 26, pipeImages['green-top'], x, bottomPipeY, "image"));
-        bottomPipeY += 26;
-        bottomPipeHeight -= 26;
-        
-        while (bottomPipeHeight > 0) {
-            let segmentHeight = Math.min(bottomPipeHeight, 52);
-            myObstacles.push(new component(52, segmentHeight, pipeImages['green-bottom'], x, bottomPipeY, "image"));
-            bottomPipeY += segmentHeight;
-            bottomPipeHeight -= segmentHeight;
-        }
-
-        // Top pipes remain as they are
-        let topPipeHeight = height;
-        myObstacles.push(new component(52, 26, pipeImages['green-top'], x, topPipeHeight - 26, "image", true));
-        topPipeHeight -= 26;
-        while (topPipeHeight > 0) {
-            let segmentHeight = Math.min(topPipeHeight, 52);
-            myObstacles.push(new component(52, segmentHeight, pipeImages['green-bottom'], x, topPipeHeight - segmentHeight, "image"));
-            topPipeHeight -= segmentHeight;
-        }
+    // Draw consistent width pipe segments for top pipe
+    topPipeHeight -= pipeSegmentHeight;
+    while (topPipeHeight > 0) {
+        let segmentHeight = Math.min(topPipeHeight, pipeSegmentHeight); // Each segment has the same height
+        myObstacles.push(new component(pipeWidth, segmentHeight, pipeImages['green-bottom'], x, topPipeHeight - segmentHeight, "image"));
+        topPipeHeight -= segmentHeight;
     }
+
+    // Create bottom pipe
+    let bottomPipeHeight = myGameArea.canvas.height - height - gap;
+    let bottomPipeY = height + gap;
+    myObstacles.push(new component(pipeWidth, pipeSegmentHeight, pipeImages['green-top'], x, bottomPipeY, "image"));
+
+    // Draw consistent width pipe segments for bottom pipe
+    bottomPipeY += pipeSegmentHeight;
+    bottomPipeHeight -= pipeSegmentHeight;
+    while (bottomPipeHeight > 0) {
+        let segmentHeight = Math.min(bottomPipeHeight, pipeSegmentHeight); // Each segment has the same height
+        myObstacles.push(new component(pipeWidth, segmentHeight, pipeImages['green-bottom'], x, bottomPipeY, "image"));
+        bottomPipeY += segmentHeight;
+        bottomPipeHeight -= segmentHeight;
+    }
+}
+
+    //     // Top pipes remain as they are
+    //     let topPipeHeight = height;
+    //     myObstacles.push(new component(52, 26, pipeImages['green-top'], x, topPipeHeight - 26, "image", true));
+    //     topPipeHeight -= 26;
+    //     while (topPipeHeight > 0) {
+    //         let segmentHeight = Math.min(topPipeHeight, 52);
+    //         myObstacles.push(new component(52, segmentHeight, pipeImages['green-bottom'], x, topPipeHeight - segmentHeight, "image"));
+    //         topPipeHeight -= segmentHeight;
+    //     }
+    // }
     
     // Move the pipes and check for collision
     for (i = 0; i < myObstacles.length; i += 1) {
