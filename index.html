@@ -154,7 +154,11 @@
         { time: 12, multiplier: 3.3 * 0.9},
         { time: 24, multiplier: 2.85 * 1.2 },
         { time: 36, multiplier: 2.4  * 1.4 },
-        { time: 48, multiplier: 1.95  * 1.4 }
+        { time: 48, multiplier: 1.95  * 1.4 },
+        { time: 60, multiplier: 1.95 * 1.2  },
+        { time: 72, multiplier: 1.95  },
+        { time: 84, multiplier: 1.7  }
+
     ];
 
     const pipeSpeedDelta = -1.2 * 1.1 * 1.5 * 2 / 1.6;
@@ -165,7 +169,7 @@
     const MAX_POS_SPEED = 20;
     const MAX_NEG_SPEED = -20;
 
-    const VERSION_NUMBER = "v0.982-2"
+    const VERSION_NUMBER = "v0.983-2"
 
     const telegramWebApp = window.Telegram.WebApp;
     telegramWebApp?.expand();
