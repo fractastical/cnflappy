@@ -165,7 +165,7 @@
     const MAX_POS_SPEED = 20;
     const MAX_NEG_SPEED = -20;
 
-    const VERSION_NUMBER = "v0.980-2"
+    const VERSION_NUMBER = "v0.981-2"
 
     const telegramWebApp = window.Telegram.WebApp;
     telegramWebApp?.expand();
@@ -306,7 +306,9 @@
     function startGameplay() {
         gameStarted = true;
         gameStartTime = new Date().getTime();
-        myGamePiece.gravity = GRAVITY_DEFAULT;
+        myGamePiece.y = window.innerHeight / 2 + 20;
+        // myGamePiece.gravity = GRAVITY_DEFAULT / 10; // Start with lower gravity
+        myGamePiece.gravitySpeed = -10; // Initial upward velocity
 
         // setTimeout(() => {
         //     // myGamePiece.gravity = 0.05 * 2; // Gravity starts after  seconds
