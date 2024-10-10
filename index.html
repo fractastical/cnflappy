@@ -151,7 +151,7 @@
     var messageImage;
 
     const gapSettings = [
-        { time: 12, multiplier: 3.3 },
+        { time: 12, multiplier: 3.3 * 0.9},
         { time: 24, multiplier: 2.85 * 1.2 },
         { time: 36, multiplier: 2.4  * 1.4 },
         { time: 48, multiplier: 1.95  * 1.4 }
@@ -163,7 +163,7 @@
     const GRAVITY_DELTA_ACCELERATION = 4;
     const MAX_ACCELERATION = -0.12;
 
-    const VERSION_NUMBER = "v0.965"
+    const VERSION_NUMBER = "v0.968"
 
     const telegramWebApp = window.Telegram.WebApp;
 
@@ -214,7 +214,8 @@
         // Increase bird se by 40%
         let birdWidth = 70;//Math.floor(34 * 1.4);
         let birdHeight = 65;//Math.floor(24 * 1.4);
-        myGamePiece = new component(birdWidth, birdHeight, birdImages['bluebird-midflap'], 10, 120, "image");
+        myGamePiece = new component(birdWidth, birdHeight, birdImages['bluebird-midflap'], (window.innerWidth - birdWidth) / 2, (window.innerHeight - birdHeight) / 2, "image");
+        
         myGamePiece.gravity = GRAVITY_DEFAULT; 
         myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
         myVersion = new component("20px", "Jockey One", "white", 10, window.innerHeight - 40, "text");
@@ -394,101 +395,104 @@
         }
     }
 
-    function updateGameArea() {
-        myGameArea.clear();
-        background.update();
+function updateGameArea() {
+    myGameArea.clear();
+    background.update();
 
-        if (!gameStarted) {
-            myGamePiece.update();
-            displayInitialMessage();
-            return;
+    if (!gameStarted) {
+        myGamePiece.update();
+        displayInitialMessage();
+        return;
+    }
+
+    if (gameStarted && !initialMessageRemoved) {
+        removeInitialMessage();
+        initialMessageRemoved = true;
+    }
+
+    if (gameOver) {
+        displayGameOver();
+        return;
+    }
+
+    myGameArea.frameNo += 1;
+
+    var currentTime = new Date().getTime();
+    var elapsedTime = (currentTime - gameStartTime) / 1000;
+
+    if (myGameArea.frameNo == 1 || everyinterval(150)) {
+        x = myGameArea.canvas.width * 1.2;
+
+        let minHeight = 20;
+        let maxHeight = myGameArea.canvas.height - 200;
+        let height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
+
+        let minGap = 105;  // Increased minimum gap for larger bird
+        let maxGap = 330;  // Increased maximum gap for larger bird
+
+        // Adjust gap multiplier for pipes from the beginning
+        for (let i = 0; i < gapSettings.length; i++) {
+            if (elapsedTime <= gapSettings[i].time) {
+                minGap *= gapSettings[i].multiplier;
+                maxGap *= gapSettings[i].multiplier;
+                break;
+            }
         }
 
-        if (gameStarted && ! initialMessageRemoved) {
-            removeInitialMessage();
-            initialMessageRemoved = true;
+        let gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
+
+        // Create more bottom pipes at the start of the game
+        let bottomPipeHeight = height;
+        let bottomPipeY = height + gap;
+        myObstacles.push(new component(52, 26, pipeImages['green-top'], x, bottomPipeY, "image"));
+        bottomPipeY += 26;
+        bottomPipeHeight -= 26;
+        
+        while (bottomPipeHeight > 0) {
+            let segmentHeight = Math.min(bottomPipeHeight, 52);
+            myObstacles.push(new component(52, segmentHeight, pipeImages['green-bottom'], x, bottomPipeY, "image"));
+            bottomPipeY += segmentHeight;
+            bottomPipeHeight -= segmentHeight;
         }
 
-        if (gameOver) {
+        // Top pipes remain as they are
+        let topPipeHeight = height;
+        myObstacles.push(new component(52, 26, pipeImages['green-top'], x, topPipeHeight - 26, "image", true));
+        topPipeHeight -= 26;
+        while (topPipeHeight > 0) {
+            let segmentHeight = Math.min(topPipeHeight, 52);
+            myObstacles.push(new component(52, segmentHeight, pipeImages['green-bottom'], x, topPipeHeight - segmentHeight, "image"));
+            topPipeHeight -= segmentHeight;
+        }
+    }
+    
+    // Move the pipes and check for collision
+    for (i = 0; i < myObstacles.length; i += 1) {
+        if (myGamePiece.crashWith(myObstacles[i])) {
+            sendScore(myGameArea.frameNo.toString()).then(() => {
+                fetchLeaderboard();
+            });
+            gameOver = true;
+            myGameArea.stop();
+            myGameArea.clear();
+            background.update();
             displayGameOver();
             return;
         }
 
-
-
-
-        myGameArea.frameNo += 1;
-
-        var currentTime = new Date().getTime();
-        var elapsedTime = (currentTime - gameStartTime) / 1000;
-
-        if (myGameArea.frameNo == 1 || everyinterval(150)) {
-            x = myGameArea.canvas.width * 1.2;
-
-            // x = myGameArea.canvas.width / 2;
-            minHeight = 20;
-            maxHeight = myGameArea.canvas.height - 200;
-            height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
-
-            minGap = 105;  // Increased minimum gap for larger bird
-            maxGap = 330;  // Increased maximum gap for larger bird
-
-            for (var i = 0; i < gapSettings.length; i++) {
-                if (elapsedTime <= gapSettings[i].time) {
-                    minGap *= gapSettings[i].multiplier;
-                    maxGap *= gapSettings[i].multiplier;
-                    break;
-                }
-            }
-
-            gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
-
-            // Create top pipe
-            let topPipeHeight = height;
-            myObstacles.push(new component(52, 26, pipeImages['green-top'], x, topPipeHeight - 26, "image", true));
-            topPipeHeight -= 26;
-            while (topPipeHeight > 0) {
-                let segmentHeight = Math.min(topPipeHeight, 52);
-                myObstacles.push(new component(52, segmentHeight, pipeImages['green-bottom'], x, topPipeHeight - segmentHeight, "image"));
-                topPipeHeight -= segmentHeight;
-            }
-
-            // Create bottom pipe
-            let bottomPipeHeight = myGameArea.canvas.height - height - gap;
-            let bottomPipeY = height + gap;
-            myObstacles.push(new component(52, 26, pipeImages['green-top'], x, bottomPipeY, "image"));
-            bottomPipeY += 26;
-            bottomPipeHeight -= 26;
-            while (bottomPipeHeight > 0) {
-                let segmentHeight = Math.min(bottomPipeHeight, 52);
-                myObstacles.push(new component(52, segmentHeight, pipeImages['green-bottom'], x, bottomPipeY, "image"));
-                bottomPipeY += segmentHeight;
-                bottomPipeHeight -= segmentHeight;
-            }
-        }
-        for (i = 0; i < myObstacles.length; i += 1) {
-            if (myGamePiece.crashWith(myObstacles[i])) {
-                sendScore(myGameArea.frameNo.toString()).then(() => {
-                    fetchLeaderboard();
-                });
-                gameOver = true;
-                myGameArea.stop();
-                myGameArea.clear();
-                background.update();
-                displayGameOver();
-                return;
-            }
-            // Increase pipe speed here
-            myObstacles[i].x += pipeSpeedDelta // Changed from -1 to -2
-            myObstacles[i].update();
-        }
-        updateBirdImage();
-        drawScore();
-        myVersion.text = VERSION_NUMBER; // VERSION VERSION VERSION
-        myVersion.update();
-        myGamePiece.newPos();
-        myGamePiece.update();
+        // Move the pipes faster
+        myObstacles[i].x += pipeSpeedDelta;
+        myObstacles[i].update();
     }
+
+    // Update bird image and score
+    updateBirdImage();
+    drawScore();
+    myVersion.text = VERSION_NUMBER;
+    myVersion.update();
+    myGamePiece.newPos();
+    myGamePiece.update();
+}
 
     function updateBirdImage() {
         if (myGamePiece.gravitySpeed < -0.15) {
