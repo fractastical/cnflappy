@@ -163,7 +163,7 @@
     const GRAVITY_DELTA_ACCELERATION = 4;
     const MAX_ACCELERATION = -0.12;
 
-    const VERSION_NUMBER = "v0.968"
+    const VERSION_NUMBER = "v0.971"
 
     const telegramWebApp = window.Telegram.WebApp;
 
@@ -215,7 +215,7 @@
         let birdWidth = 70;//Math.floor(34 * 1.4);
         let birdHeight = 65;//Math.floor(24 * 1.4);
         myGamePiece = new component(birdWidth, birdHeight, birdImages['bluebird-midflap'], (window.innerWidth - birdWidth) / 2, (window.innerHeight - birdHeight) / 2, "image");
-        
+
         myGamePiece.gravity = GRAVITY_DEFAULT; 
         myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
         myVersion = new component("20px", "Jockey One", "white", 10, window.innerHeight - 40, "text");
@@ -291,12 +291,13 @@
         if (!gameStarted) {
             startGameplay();
         } else if (e.type === 'touchstart') {
-            if(myGamePiece.gravitySpeed < MAX_ACCELERATION) 
-                accelerate(touchAcceleration / 3);
-            else 
-              accelerate(touchAcceleration);
+            // if(myGamePiece.gravitySpeed < MAX_ACCELERATION) 
+            //     accelerate(touchAcceleration / 3);
+            // else 
+            //   accelerate(touchAcceleration);
         } else if (e.type === 'touchend') {
-            accelerate(0.05);
+            accelerate(touchAcceleration * 5);
+            // accelerate(0.05);
         }
     }
 
