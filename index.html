@@ -163,7 +163,7 @@
     const GRAVITY_DELTA_ACCELERATION = 4;
     const MAX_ACCELERATION = -0.12;
 
-    const VERSION_NUMBER = "v0.971"
+    const VERSION_NUMBER = "v0.972"
 
     const telegramWebApp = window.Telegram.WebApp;
 
@@ -214,7 +214,7 @@
         // Increase bird se by 40%
         let birdWidth = 70;//Math.floor(34 * 1.4);
         let birdHeight = 65;//Math.floor(24 * 1.4);
-        myGamePiece = new component(birdWidth, birdHeight, birdImages['bluebird-midflap'], (window.innerWidth - birdWidth) / 2, (window.innerHeight - birdHeight) / 2, "image");
+        myGamePiece = new component(birdWidth, birdHeight, birdImages['bluebird-midflap'], 10, (window.innerHeight - birdHeight) / 2, "image");
 
         myGamePiece.gravity = GRAVITY_DEFAULT; 
         myScore = new component("20px", "Jockey One", "white", window.innerWidth - 200, window.innerHeight - 40, "text");
